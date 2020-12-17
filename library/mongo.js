@@ -1,13 +1,17 @@
 const MongoClient = require("mongodb").MongoClient;
 require("dotenv/config");
 
-async function conexaoMongo(stringConnexao) {
-  if (stringConnexao) {
+async function conexaoMongo(idEstabelecimentoBubble) {
+  if (idEstabelecimentoBubble) {
     return new Promise((resolve, reject) => {
       const opcoesDeConexao = {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       };
+      const stringConnexao =
+        process.env.CONNECTIONSTRING1 +
+        idEstabelecimentoBubble.toString() +
+        process.env.CONNECTIONSTRING2;
       MongoClient.connect(stringConnexao, opcoesDeConexao, (erro, conexao) => {
         if (erro) {
           console.log("Conexão com Mongo mal sucedida..." + new Date());
@@ -22,11 +26,7 @@ async function conexaoMongo(stringConnexao) {
 }
 
 async function criaBancoECollections(idEstabelecimentoBubble) {
-  const stringConexao =
-    process.env.CONNECTIONSTRING1 +
-    idEstabelecimentoBubble.toString() +
-    process.env.CONNECTIONSTRING2;
-  const client = await conexaoMongo(stringConexao);
+  const client = await conexaoMongo(idEstabelecimentoBubble);
   var resposta = await client
     .db(idEstabelecimentoBubble.toString())
     .createCollection("VENDAS");
