@@ -1,4 +1,6 @@
 const MongoClient = require("mongodb").MongoClient;
+const assert = require("assert");
+const fs = require("fs");
 require("dotenv/config");
 
 async function conexaoMongo(idEstabelecimentoBubble) {
@@ -25,28 +27,54 @@ async function conexaoMongo(idEstabelecimentoBubble) {
   }
 }
 
+async function listaDeCollections(client) {
+  const resultado = await client
+    .db("gex-admin")
+    .collection("COLLECTIONS")
+    .find({})
+    .toArray();
+  return resultado;
+}
+
+async function criaCollection(conexao, collection) {
+  return new Promise(async (resolve, reject) => {
+    conexao.createCollection(collection, (erro, resultado) => {
+      if (erro) {
+        assert.deepStrictEqual(48, erro.code);
+        if (erro.code === 48) {
+          resolve({
+            Collection: collection,
+            Status: "Ja existente",
+          });
+        } else {
+          reject(error);
+        }
+        reject(erro);
+      } else {
+        resolve({
+          Collection: collection,
+          Status: "Criado",
+        });
+      }
+    });
+  });
+}
+
 async function criaBancoECollections(idEstabelecimentoBubble) {
   const client = await conexaoMongo(idEstabelecimentoBubble);
-  var resposta = await client
-    .db(idEstabelecimentoBubble.toString())
-    .createCollection("VENDAS");
-  resposta = await client
-    .db(idEstabelecimentoBubble.toString())
-    .createCollection("VENDAVEL");
-  resposta = await client
-    .db(idEstabelecimentoBubble.toString())
-    .createCollection("INSUMO");
-  resposta = await client
-    .db(idEstabelecimentoBubble.toString())
-    .createCollection("MEIODEPAGAMENTO");
-  resposta = await client
-    .db(idEstabelecimentoBubble.toString())
-    .createCollection("PAGAMENTO");
-  resposta = await client
-    .db(idEstabelecimentoBubble.toString())
-    .createCollection("FOLHADEPONTO");
+  const collections = await listaDeCollections(client);
+  indice = 0;
+  do {
+    resultado = await criaCollection(
+      client.db(idEstabelecimentoBubble),
+      collections[indice].collection
+    );
+    console.log(resultado);
+    indice++;
+  } while (indice < Object.keys(collections).length);
+
   fechamento = await client.close();
-  return "ok";
+  return collections;
 }
 
 module.exports = {

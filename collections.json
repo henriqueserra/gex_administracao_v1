@@ -1,0 +1,17 @@
+[
+  { "collection": "VENDAS" },
+  { "collection": "VENDAVEL" },
+  { "collection": "INSUMO" },
+  { "collection": "MEIODEPAGAMENTO" },
+  { "collection": "PAGAMENTO" },
+  { "collection": "FOLHADEPONTO" },
+  { "collection": "UNIDADEDEMEDIDA" },
+  { "collection": "TAMANHO" },
+  { "collection": "SUBCATEGORIA" },
+  { "collection": "CATEGORIA" },
+  { "collection": "PRODUCAOREALIZADA" },
+  { "collection": "PRODUCAOSOLICITADA" },
+  { "collection": "FICHATECNCICA" },
+  { "collection": "FASEDAPRODUCAO" },
+  { "collection": "CONSOLIDADOCALENDARIO" }
+]
