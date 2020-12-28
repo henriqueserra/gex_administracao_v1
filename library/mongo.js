@@ -1,6 +1,5 @@
 const MongoClient = require("mongodb").MongoClient;
 const assert = require("assert");
-const fs = require("fs");
 require("dotenv/config");
 
 async function conexaoMongo(idEstabelecimentoBubble) {
@@ -38,7 +37,7 @@ async function listaDeCollections(client) {
 
 async function criaCollection(conexao, collection) {
   return new Promise(async (resolve, reject) => {
-    conexao.createCollection(collection, (erro, resultado) => {
+    conexao.createCollection(collection, (erro) => {
       if (erro) {
         assert.deepStrictEqual(48, erro.code);
         if (erro.code === 48) {
@@ -47,7 +46,7 @@ async function criaCollection(conexao, collection) {
             Status: "Ja existente",
           });
         } else {
-          reject(error);
+          reject(erro);
         }
         reject(erro);
       } else {
@@ -63,9 +62,9 @@ async function criaCollection(conexao, collection) {
 async function criaBancoECollections(idEstabelecimentoBubble) {
   const client = await conexaoMongo(idEstabelecimentoBubble);
   const collections = await listaDeCollections(client);
-  indice = 0;
+  let indice = 0;
   do {
-    resultado = await criaCollection(
+    var resultado = await criaCollection(
       client.db(idEstabelecimentoBubble),
       collections[indice].collection
     );
@@ -73,7 +72,7 @@ async function criaBancoECollections(idEstabelecimentoBubble) {
     indice++;
   } while (indice < Object.keys(collections).length);
 
-  fechamento = await client.close();
+  await client.close();
   return collections;
 }
 
