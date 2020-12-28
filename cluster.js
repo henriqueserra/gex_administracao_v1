@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const consign = require("consign");
 const bodyParser = require("body-parser");
+const morgan = require("morgan");
 
 if (cluster.isMaster) {
   console.log(`Master ${process.pid} is running`);
@@ -20,6 +21,7 @@ if (cluster.isMaster) {
   // Workers can share any TCP connection
   // In this case it is an HTTP server
   const app = express();
+  app.use(morgan("combined"));
   app.use(require("express-status-monitor")());
   app.use(cors());
   app.use(bodyParser.urlencoded({ extended: false }));
