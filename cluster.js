@@ -29,7 +29,7 @@ if (cluster.isMaster) {
 
   app.listen(3500, () => {
     // console.clear();
-    console.log("servidor rodando na porta 4000");
+    console.log("servidor rodando na porta 3500");
   });
 
   console.log(`Worker ${process.pid} started`);
