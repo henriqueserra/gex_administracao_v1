@@ -31,6 +31,7 @@ async function listaDeCollections(client) {
     .db("gex-admin")
     .collection("COLLECTIONS")
     .find({})
+    .sort({ collection: 1 })
     .toArray();
   return resultado;
 }
