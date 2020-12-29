@@ -13,6 +13,7 @@ async function conexaoMongo(idEstabelecimentoBubble) {
         process.env.CONNECTIONSTRING1 +
         idEstabelecimentoBubble.toString() +
         process.env.CONNECTIONSTRING2;
+      console.log(stringConnexao);
       MongoClient.connect(stringConnexao, opcoesDeConexao, (erro, conexao) => {
         if (erro) {
           console.log("Conexão com Mongo mal sucedida..." + new Date());
